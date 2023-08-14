@@ -1,4 +1,7 @@
-namespace AUG2023_WebAPI_MorBatNg
+using Microsoft.EntityFrameworkCore;
+using WebAPICodeFirstCreateDB.Models;
+
+namespace WebAPICodeFirstCreateDB
 {
     public class Program
     {
@@ -7,11 +10,17 @@ namespace AUG2023_WebAPI_MorBatNg
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<ToDoDbContext>(options =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(connectionString);
+            });
+
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<Models.KNDProductDbContext>();
-
-            builder.Services.AddControllers().AddXmlSerializerFormatters();
 
             var app = builder.Build();
 
